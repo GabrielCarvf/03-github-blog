@@ -2,7 +2,7 @@ import { PostContainer } from './styles'
 
 export function PostCard() {
   return (
-    <PostContainer>
+    <PostContainer to={`/${12374}`}>
       <header>
         <h3>JavaScript data types and data structures</h3>
         <span>Há 1 dia</span>

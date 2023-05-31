@@ -40,8 +40,11 @@ export const UserProfileContainer = styled.div`
     font-weight: bold;
     font-size: 0.75rem;
     text-decoration: none;
+
+    border-bottom: 1px solid transparent;
+
     &:hover {
-      text-decoration: underline;
+      border-bottom: 1.5px solid ${({ theme }) => theme.blue};
     }
   }
 

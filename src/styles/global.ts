@@ -22,4 +22,18 @@ export const GlobalStyle = createGlobalStyle`
     font: 400 1rem 'Nunito', sans-serif;
     line-height: 1.6;
   }
+
+  *::-webkit-scrollbar {
+  width: 0.35rem;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: ${(props) => props.theme['base-label']};
+  border-radius: 999px;
+  border: 0;
+}
 `

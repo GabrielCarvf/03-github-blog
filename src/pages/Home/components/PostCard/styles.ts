@@ -1,6 +1,7 @@
+import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 
-export const PostContainer = styled.div`
+export const PostContainer = styled(NavLink as any)`
   padding: 2rem;
   max-height: 16.25rem;
   border-radius: 10px;
@@ -9,6 +10,11 @@ export const PostContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+
+  text-decoration: none;
+  color: inherit;
+
+  border: 2px solid transparent;
 
   header {
     display: flex;
@@ -31,5 +37,10 @@ export const PostContainer = styled.div`
 
   p {
     overflow: auto;
+  }
+
+  &:hover {
+    transition: 0.2s;
+    border: 2px solid ${({ theme }) => theme['base-label']};
   }
 `
