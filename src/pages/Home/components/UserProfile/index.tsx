@@ -6,38 +6,61 @@ import {
   faBuilding,
   faUserGroup,
 } from '@fortawesome/free-solid-svg-icons'
+import { useEffect, useState } from 'react'
+import { api } from '../../../../lib/axios'
+
+interface UserProfileProps {
+  name: string
+  login: string
+  avatar_url: string
+  company: string
+  bio: string
+  followers: number
+  html_url: string
+}
 
 export function UserProfile() {
+  const [userProfile, setUserProfile] = useState({} as UserProfileProps)
+
+  async function getUserProfile() {
+    const { data } = await api.get('/users/GabrielCarvf')
+    setUserProfile({
+      name: data.name,
+      login: data.login,
+      avatar_url: data.avatar_url,
+      company: data.company,
+      bio: data.bio,
+      followers: data.followers,
+      html_url: data.html_url,
+    })
+  }
+
+  useEffect(() => {
+    getUserProfile()
+  }, [])
+
   return (
     <UserProfileContainer>
-      <img src="https://avatars.githubusercontent.com/u/39717664?v=4" alt="" />
+      <img src={userProfile.avatar_url} alt="" />
       <div>
-        <h3>Gabriel Carvalho</h3>
-        <p>
-          Tristique volutpat pulvinar vel massa, pellentesque egestas. Eu
-          viverra massa quam dignissim aenean malesuada suscipit. Nunc, volutpat
-          pulvinar vel mass.
-        </p>
+        <h3>{userProfile.name}</h3>
+        <p>{userProfile.bio}</p>
         <Infos>
           <div>
             <FontAwesomeIcon icon={faGithub} size="lg" />
-            <span>GabrielCarvf</span>
+            <span>{userProfile.login}</span>
           </div>
           <div>
             <FontAwesomeIcon icon={faBuilding} />
-            <span>VFLOWS</span>
+            <span>{userProfile.company}</span>
           </div>
           <div>
             <FontAwesomeIcon icon={faUserGroup} />
-            <span>10 seguidores</span>
+            <span>{userProfile.followers} seguidores</span>
           </div>
         </Infos>
       </div>
-      <a
-        href="https://github.com/GabrielCarvf"
-        target="_blank"
-        rel="noreferrer"
-      >
+      <a href={userProfile.html_url} target="_blank" rel="noreferrer">
         GITHUB <FontAwesomeIcon icon={faArrowUpRightFromSquare} />{' '}
       </a>
     </UserProfileContainer>

@@ -5,6 +5,7 @@ export const UserProfileContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 2rem;
+  width: 100%;
   max-width: 54rem;
   padding: 2rem;
 
@@ -24,6 +25,7 @@ export const UserProfileContainer = styled.div`
     font-weight: bold;
     font-size: 2rem;
     line-height: 1.3;
+    margin-bottom: 0.6rem;
   }
 
   p {
