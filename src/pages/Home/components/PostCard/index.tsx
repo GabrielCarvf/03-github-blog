@@ -1,17 +1,24 @@
+/* eslint-disable camelcase */
+import { formatDistanceToNowStrict } from 'date-fns'
+import ptBR from 'date-fns/locale/pt-BR'
+import { UserPostProps } from '../../../../contexts/blogContext'
 import { PostContainer } from './styles'
 
-export function PostCard() {
+export function PostCard({ id, title, created_at, body }: UserPostProps) {
+  function formatDateDifference(postCreationDateString: string) {
+    return formatDistanceToNowStrict(new Date(postCreationDateString), {
+      addSuffix: true,
+      locale: ptBR,
+    })
+  }
+
   return (
-    <PostContainer to={`/${12374}`}>
+    <PostContainer to={`/${id}`}>
       <header>
-        <h3>JavaScript data types and data structures</h3>
-        <span>Há 1 dia</span>
+        <h3>{title}</h3>
+        <span>{formatDateDifference(created_at)}</span>
       </header>
-      <p>
-        Programming languages all have built-in data structures, but these often
-        differ from one language to another. This article attempts to list the
-        built-in data structures available in
-      </p>
+      <p>{body.substring(0, 150)}...</p>
     </PostContainer>
   )
 }
