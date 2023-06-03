@@ -25,7 +25,8 @@
     "react-router-dom": "^6.11.2",
     "react-syntax-highlighter": "^15.5.0",
     "remark-gfm": "^3.0.1",
-    "styled-components": "^5.3.11"
+    "styled-components": "^5.3.11",
+    "use-debounce": "^9.0.4"
   },
   "devDependencies": {
     "@rocketseat/eslint-config": "^1.2.0",

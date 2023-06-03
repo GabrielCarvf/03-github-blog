@@ -1,18 +1,14 @@
 import { FormContainer, HomeContainer, PostsContainer } from './styles'
 import { UserProfile } from './components/UserProfile'
 import { PostCard } from './components/PostCard'
-import { ChangeEvent, useContext, useState } from 'react'
+import { ChangeEvent, useContext } from 'react'
 import { BlogContext } from '../../contexts/blogContext'
 
 export function Home() {
-  const [searchString, setSearchString] = useState('')
-  const { userPosts, fetchUserPosts } = useContext(BlogContext)
+  const { userPosts, searchTerm, setSearchTerm } = useContext(BlogContext)
 
-  function handleSearchStringChange(event: ChangeEvent<HTMLInputElement>) {
-    fetchUserPosts(event.target.value)
-    setSearchString((state) => {
-      return event.target.value
-    })
+  function handleSearchTermChange(event: ChangeEvent<HTMLInputElement>) {
+    setSearchTerm(event.target.value)
   }
 
   return (
@@ -27,8 +23,8 @@ export function Home() {
         <input
           type="text"
           placeholder="Buscar conteúdo"
-          value={searchString}
-          onChange={handleSearchStringChange}
+          value={searchTerm}
+          onChange={handleSearchTermChange}
         />
       </FormContainer>
 

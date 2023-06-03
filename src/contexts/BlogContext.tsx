@@ -6,6 +6,7 @@ import {
   useState,
 } from 'react'
 import { api } from '../lib/axios'
+import { useDebounce } from 'use-debounce'
 
 interface UserProfileProps {
   name: string
@@ -27,7 +28,8 @@ export interface UserPostProps {
 interface BlogContextType {
   userProfile: UserProfileProps
   userPosts: UserPostProps[]
-  fetchUserPosts: (searchString: string) => Promise<void>
+  searchTerm: string
+  setSearchTerm: (searchTerm: string) => void
 }
 
 interface BlogContextProviderProps {
@@ -41,6 +43,8 @@ export function BlogContextProvider({ children }: BlogContextProviderProps) {
 
   const [userProfile, setUserProfile] = useState({} as UserProfileProps)
   const [userPosts, setUserPosts] = useState([] as UserPostProps[])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [debouncedSearchTerm] = useDebounce(searchTerm, 500)
 
   async function fetchUserProfile() {
     const { data } = await api.get(`/users/${userName}`)
@@ -56,12 +60,7 @@ export function BlogContextProvider({ children }: BlogContextProviderProps) {
   }
 
   const fetchUserPosts = useCallback(async (searchString: string) => {
-    // const queryString =
-    //   'q=' +
-    //   encodeURIComponent(`${searchString}repo:${userName}/03-github-blog`)
-
     const { data } = await api.get(
-      // 'https://api.github.com/search/issues?q=Boas%20pr%C3%A1ticas%20repo:rocketseat-education/reactjs-github-blog-challenge',
       `https://api.github.com/search/issues?q=${searchString}+repo:${userName}/03-github-blog`,
     )
 
@@ -79,12 +78,22 @@ export function BlogContextProvider({ children }: BlogContextProviderProps) {
   }, [])
 
   useEffect(() => {
-    fetchUserPosts('')
     fetchUserProfile()
-  }, [fetchUserPosts])
+  }, [])
+
+  useEffect(() => {
+    fetchUserPosts(debouncedSearchTerm)
+  }, [debouncedSearchTerm, fetchUserPosts])
 
   return (
-    <BlogContext.Provider value={{ userProfile, userPosts, fetchUserPosts }}>
+    <BlogContext.Provider
+      value={{
+        userProfile,
+        userPosts,
+        searchTerm,
+        setSearchTerm,
+      }}
+    >
       {children}
     </BlogContext.Provider>
   )
