@@ -6,11 +6,39 @@ import {
   faBuilding,
   faUserGroup,
 } from '@fortawesome/free-solid-svg-icons'
-import { useContext } from 'react'
-import { BlogContext } from '../../../../contexts/blogContext'
+import { useCallback, useEffect, useState } from 'react'
+import { api } from '../../../../lib/axios'
+import { userName } from '../../../../contexts/BlogContext'
+
+interface UserProfileProps {
+  name: string
+  login: string
+  avatar_url: string
+  company: string
+  bio: string
+  followers: number
+  html_url: string
+}
 
 export function UserProfile() {
-  const { userProfile } = useContext(BlogContext)
+  const [userProfile, setUserProfile] = useState({} as UserProfileProps)
+
+  const fetchUserProfile = useCallback(async () => {
+    const { data } = await api.get(`/users/${userName}`)
+    setUserProfile({
+      name: data.name,
+      login: data.login,
+      avatar_url: data.avatar_url,
+      company: data.company,
+      bio: data.bio,
+      followers: data.followers,
+      html_url: data.html_url,
+    })
+  }, [])
+
+  useEffect(() => {
+    fetchUserProfile()
+  }, [fetchUserProfile])
 
   return (
     <UserProfileContainer>

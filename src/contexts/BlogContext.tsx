@@ -8,16 +8,6 @@ import {
 import { api } from '../lib/axios'
 import { useDebounce } from 'use-debounce'
 
-interface UserProfileProps {
-  name: string
-  login: string
-  avatar_url: string
-  company: string
-  bio: string
-  followers: number
-  html_url: string
-}
-
 export interface UserPostProps {
   id: number
   number: number
@@ -30,7 +20,6 @@ export interface UserPostProps {
 }
 
 interface BlogContextType {
-  userProfile: UserProfileProps
   userPosts: UserPostProps[]
   searchTerm: string
   setSearchTerm: (searchTerm: string) => void
@@ -41,32 +30,18 @@ interface BlogContextProviderProps {
 }
 
 export const BlogContext = createContext({} as BlogContextType)
+export const userName = 'GabrielCarvf'
+export const repoName = '03-github-blog'
 
 export function BlogContextProvider({ children }: BlogContextProviderProps) {
-  const userName = 'GabrielCarvf'
-  const [userProfile, setUserProfile] = useState({} as UserProfileProps)
-
   const [userPosts, setUserPosts] = useState([] as UserPostProps[])
 
   const [searchTerm, setSearchTerm] = useState('')
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500)
 
-  async function fetchUserProfile() {
-    const { data } = await api.get(`/users/${userName}`)
-    setUserProfile({
-      name: data.name,
-      login: data.login,
-      avatar_url: data.avatar_url,
-      company: data.company,
-      bio: data.bio,
-      followers: data.followers,
-      html_url: data.html_url,
-    })
-  }
-
   const fetchUserPosts = useCallback(async (searchString: string) => {
     const { data } = await api.get(
-      `https://api.github.com/search/issues?q=${searchString}+repo:${userName}/03-github-blog`,
+      `https://api.github.com/search/issues?q=${searchString}+repo:${userName}/${repoName}`,
     )
 
     const posts = data.items.reduce((acc: any, item: any) => {
@@ -87,17 +62,12 @@ export function BlogContextProvider({ children }: BlogContextProviderProps) {
   }, [])
 
   useEffect(() => {
-    fetchUserProfile()
-  }, [])
-
-  useEffect(() => {
     fetchUserPosts(debouncedSearchTerm)
   }, [debouncedSearchTerm, fetchUserPosts])
 
   return (
     <BlogContext.Provider
       value={{
-        userProfile,
         userPosts,
         searchTerm,
         setSearchTerm,
