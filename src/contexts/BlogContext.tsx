@@ -20,9 +20,13 @@ interface UserProfileProps {
 
 export interface UserPostProps {
   id: number
+  number: number
   title: string
   body: string
   created_at: string
+  html_url: string
+  comments: number
+  userLogin: string
 }
 
 interface BlogContextType {
@@ -40,9 +44,10 @@ export const BlogContext = createContext({} as BlogContextType)
 
 export function BlogContextProvider({ children }: BlogContextProviderProps) {
   const userName = 'GabrielCarvf'
-
   const [userProfile, setUserProfile] = useState({} as UserProfileProps)
+
   const [userPosts, setUserPosts] = useState([] as UserPostProps[])
+
   const [searchTerm, setSearchTerm] = useState('')
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500)
 
@@ -67,9 +72,13 @@ export function BlogContextProvider({ children }: BlogContextProviderProps) {
     const posts = data.items.reduce((acc: any, item: any) => {
       acc.push({
         id: item.id,
+        number: item.number,
         title: item.title,
         body: item.body,
         created_at: item.created_at,
+        html_url: item.html_url,
+        comments: item.comments,
+        userLogin: item.user.login,
       })
 
       return acc

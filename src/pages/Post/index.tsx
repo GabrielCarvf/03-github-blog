@@ -1,10 +1,12 @@
 // import { useParams } from 'react-router-dom'
-import React from 'react'
+import React, { useContext } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { PostInfos } from './components/PostInfos'
 import { PostContainer, PostContent } from './styles'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { useParams } from 'react-router-dom'
+import { BlogContext } from '../../contexts/blogContext'
 
 interface CodeProps {
   node: React.ReactNode
@@ -39,27 +41,12 @@ const Code: React.FC<CodeProps> = ({
 }
 
 export function Post() {
-  const markdownContent = `
-  # Exemplo de Markdown
-  
-  Este é um parágrafo normal.
-  
-  ## Código em JavaScript
-  
-  Aqui está um trecho de código em JavaScript:
-  
-  \`\`\`javascript
-  function soma(a, b) {
-    return a + b;
-  }
-  
-  console.log(soma(2, 3)); // Output: 5
-  \`\`\`
-  
-  ## Outro parágrafo
-  
-  Este é outro parágrafo com um link [OpenAI](https://openai.com/).
-  `
+  const { issueNumber } = useParams()
+  const { userPosts } = useContext(BlogContext)
+
+  const detailedPost = userPosts.find(
+    (item) => item.number === parseInt(issueNumber!),
+  )
 
   const components: any = {
     code: Code,
@@ -67,9 +54,11 @@ export function Post() {
 
   return (
     <PostContainer>
-      <PostInfos />
+      <PostInfos {...detailedPost!} />
       <PostContent>
-        <ReactMarkdown components={components}>{markdownContent}</ReactMarkdown>
+        <ReactMarkdown components={components}>
+          {detailedPost!.body}
+        </ReactMarkdown>
       </PostContent>
     </PostContainer>
   )

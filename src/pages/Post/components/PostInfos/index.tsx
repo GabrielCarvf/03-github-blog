@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Infos, PostInfosContainer } from './styles'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
@@ -8,31 +9,34 @@ import {
   faComment,
 } from '@fortawesome/free-solid-svg-icons'
 import { NavLink } from 'react-router-dom'
+import { formatDateDifference } from '../../../../utils/formatter'
+import { UserPostProps } from '../../../../contexts/blogContext'
 
-export function PostInfos() {
+export function PostInfos({
+  html_url,
+  title,
+  userLogin,
+  created_at,
+}: UserPostProps) {
   return (
     <PostInfosContainer>
       <nav>
         <NavLink to="/">
           <FontAwesomeIcon icon={faChevronLeft} /> VOLTAR
         </NavLink>
-        <a
-          href="https://github.com/GabrielCarvf"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a href={html_url} target="_blank" rel="noreferrer">
           VER NO GITHUB <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
         </a>
       </nav>
-      <h3>JavaScript data types and data structures</h3>
+      <h3>{title}</h3>
       <Infos>
         <div>
           <FontAwesomeIcon icon={faGithub} size="lg" />
-          <span>GabrielCarvf</span>
+          <span>{userLogin}</span>
         </div>
         <div>
           <FontAwesomeIcon icon={faCalendarDay} />
-          <span>Há 1 dia</span>
+          <span>{formatDateDifference(created_at)}</span>
         </div>
         <div>
           <FontAwesomeIcon icon={faComment} />

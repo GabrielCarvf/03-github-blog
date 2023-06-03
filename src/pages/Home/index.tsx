@@ -11,6 +11,8 @@ export function Home() {
     setSearchTerm(event.target.value)
   }
 
+  console.log(userPosts)
+
   return (
     <HomeContainer>
       <UserProfile />
@@ -18,7 +20,7 @@ export function Home() {
       <FormContainer>
         <div>
           <label>Publicações</label>
-          <span>6 publicações</span>
+          <span>{userPosts.length} publicações</span>
         </div>
         <input
           type="text"
